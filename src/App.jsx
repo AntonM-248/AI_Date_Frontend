@@ -49,16 +49,76 @@ const MatchesList = () => (
   </div>
 );
 
+const ChatScreen = () => {
+  const [input, setInput] = useState("");
+
+  const handleSend = () => {
+    if(input.trim()){
+    console.log(input);
+    setInput("");
+    }
+  }
+
+  return(
+    <div className="rounded-lg shadow-lg p-4">
+      <h2 className="text-2xl font-bold mb-4">Chat with Foo Bar</h2>
+      <div className="h-[25vh] border border-gray-200 rounded overflow-y-auto mb-4 p-2">
+        {
+          [
+            "hi",
+            "I'm bob",
+            "I'm sharon",
+            "Let's get coffee",
+            "Sure thing",
+            "How about Friday",
+            "That works"
+          ].map((message, index) =>  (
+            <div key={index}>
+              <div className="mb-4 p-2 rounded bg-gray-100">{message}</div>
+            </div>
+          )) 
+        }
+      </div>
+      <div className="flex">
+        <input 
+          type="text"
+          value={input}
+          onChange={(e) => setInput(e.target.value)}
+          className="border flex-1 rounded p-2 mr-2"
+          placeholder="Type a message..."
+        />
+        <button 
+          className="bg-blue-500 text-white rounded p-2"
+          onClick={handleSend}
+        >Send</button>
+      </div>
+    </div>
+  )
+}
+
 function App() {
+  const [currentScreen, setCurrentScreen] = useState('profile');
+  const renderScreen = () => 
+    {switch (currentScreen) {
+      case 'profile':
+        return <ProfileSelector />;
+      case 'matches':
+        return <MatchesList />;
+      case 'chat':
+        return <ChatScreen />;
+      default:
+        break;
+    }
+  }
   return (
     <>
       <div className="w-full max-w-lg mx-auto p-9">
         <nav className="flex justify-between mx-2 my-2 mb-4">
-          <User />
-          <MessageCircle />
+          <User onClick={() => setCurrentScreen("profile")}/>
+          <MessageCircle onClick={() => setCurrentScreen("matches")}/>
         </nav>
-        <ProfileSelector />
-        {/* <MatchesList /> */}
+        {renderScreen()}
+          
       </div>
     </>
   )
