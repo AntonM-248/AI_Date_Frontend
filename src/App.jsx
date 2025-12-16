@@ -1,6 +1,7 @@
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import './App.css'
 import {User, MessageCircle, Heart, X} from 'lucide-react';
+import {fetchRandomProfile} from './Api.jsx'
 
 const ProfileSelector = () => (
   <div className="rounded-lg overflow-hidden bg-white shadow-lg">
@@ -99,7 +100,22 @@ const ChatScreen = () => {
 }
 
 function App() {
+  const loadRandomProfile = async () => {
+    try {
+      const profile = await fetchRandomProfile();
+      setCurrentProfile(profile);
+    } catch (error) {
+      console.log(error);
+    }
+  }
+
+  useEffect(() => {
+    loadRandomProfile();
+  })
+
   const [currentScreen, setCurrentScreen] = useState('matches');
+  const [currentProfile, setCurrentProfile] = useState(null);
+
   const renderScreen = () => 
     {switch (currentScreen) {
       case 'profile':
